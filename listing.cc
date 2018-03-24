@@ -14,6 +14,9 @@ using namespace std;
 static int lineNumber;
 static string error = "";
 static int totalErrors = 0;
+static int lexErrors = 0;
+static int semErrors = 0;
+static int synErrors = 0;
 
 static void displayErrors();
 
@@ -35,16 +38,41 @@ int lastLine()
 	printf("\r");
 	displayErrors();
 	printf("     \n");
+	if (totalErrors == 0)
+	{
+			printf("Compiled Succesfully");
+	}
+	else
+	{
+			printf("Lexical Errors: %4d\n", lexErrors)
+			printf("Syntax Errors: %4d\n", synErrors)
+			printf("Semantic Errors: %4d\n", semErrors)
+	}
+
 	return totalErrors;
 }
-    
+
 void appendError(ErrorCategories errorCategory, string message)
 {
-	string messages[] = { "Lexical Error, Invalid Character ", "",
+	string messages[] = { "Lexical Error, Invalid Character ",
+	  "Syntax Error, Unexpected IDENTIFIER, expecting ",
 		"Semantic Error, ", "Semantic Error, Duplicate Identifier: ",
 		"Semantic Error, Undeclared " };
-
-	error = messages[errorCategory] + message;
+		error = messages[errorCategory] + message;
+	if (errorCategory == 0)
+	{
+		error += messages[errorCategory]+message+"\n";
+		lexErrors++;
+	} else if (errorCategory == 1)
+	{
+		error += messages[errorCategory]+message+"\n";
+		synErrors++;
+	} else
+	{
+		error += messages[errorCategory]+message+"\n";
+		semErrors++;
+	}
+	/*error = messages[errorCategory] + message;*/
 	totalErrors++;
 }
 
