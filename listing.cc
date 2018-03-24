@@ -44,9 +44,9 @@ int lastLine()
 	}
 	else
 	{
-			printf("Lexical Errors: %4d\n", lexErrors)
-			printf("Syntax Errors: %4d\n", synErrors)
-			printf("Semantic Errors: %4d\n", semErrors)
+			printf("Lexical Errors: %4d\n", lexErrors);
+			printf("Syntax Errors: %4d\n", synErrors);
+			printf("Semantic Errors: %4d\n", semErrors);
 	}
 
 	return totalErrors;
