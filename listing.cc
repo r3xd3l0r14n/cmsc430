@@ -1,5 +1,6 @@
 // Compiler Theory and Design
-// Dr. Duane J. Jarc
+// Colin R.R. Delorme
+// 24 Mar 2018
 
 // This file contains the bodies of the functions that produces the compilation
 // listing

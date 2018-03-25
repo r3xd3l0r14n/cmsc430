@@ -1,5 +1,6 @@
 /* Compiler Theory and Design
-   Dr. Duane J. Jarc */
+   Colin R.R. Delorme
+   24Mar 2018 */
 
 /* This file contains flex input file */
 
