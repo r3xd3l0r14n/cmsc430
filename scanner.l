@@ -21,7 +21,7 @@ ws		[ \t\r]+
 comment		\-\-.*\n
 comment2 \/\/.*\n
 line		[\n]
-id		([a-zA-Z]+(?:_[a-zA-Z]+)*)
+id		[A-Za-z](_?[A-Za-z0-9])*
 digit		\-?[0-9]
 int		{digit}+
 punc		[\(\),:;]
