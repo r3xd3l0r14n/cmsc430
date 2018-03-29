@@ -57,10 +57,6 @@ returns		{ ECHO; return(RETURNS); }
 and		{ ECHO; return(ANDOP); }
 or    { ECHO; return(OROP); }
 not   { ECHO; return(NOTOP);}
-{id}		{ ECHO; return(IDENTIFIER);}
-{int}		{ ECHO; return(INT_LITERAL); }
-{punc}		{ ECHO; return(yytext[0]); }
-{realLit} { ECHO; return(REAL_LITERAL); }
 true      { ECHO; return(BOOL_LITERAL); }
 false     { ECHO; return(BOOL_LITERAL); }
 case      { ECHO; return(CASE); }
@@ -68,12 +64,14 @@ else      { ECHO; return(ELSE); }
 endcase   { ECHO; return(ENDCASE); }
 endif     { ECHO; return(ENDIF); }
 if        { ECHO; return(IF); }
-is        { ECHO; return(IS); }
 others    { ECHO; return(OTHERS); }
 real      { ECHO; return(REAL); }
-returns   { ECHO; return(RETURNS); }
 then      { ECHO; return(THEN); }
 when      { ECHO; return(WHEN); }
+{id}		{ ECHO; return(IDENTIFIER);}
+{int}		{ ECHO; return(INT_LITERAL); }
+{punc}		{ ECHO; return(yytext[0]); }
+{realLit} { ECHO; return(REAL_LITERAL); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%
 
