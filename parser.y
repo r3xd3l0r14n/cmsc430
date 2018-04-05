@@ -25,15 +25,14 @@ void yyerror(const char* message);
 
 %%
 
-function:	
-	function_header optional_variable body ;
-	
-function_header:	
+function:
+	function_header variables body ;
+
+function_header:
 	FUNCTION IDENTIFIER RETURNS type ';' ;
 
-optional_variable:
-	variable |
-	;
+variables:
+  variable ;
 
 variable:
 	IDENTIFIER ':' type IS statement_ ;
@@ -44,11 +43,11 @@ type:
 
 body:
 	BEGIN_ statement_ END ';' ;
-    
+
 statement_:
 	statement ';' |
 	error ';' ;
-	
+
 statement:
 	expression |
 	REDUCE operator reductions ENDREDUCE ;
@@ -60,7 +59,7 @@ operator:
 reductions:
 	reductions statement_ |
 	;
-		    
+
 expression:
 	expression ANDOP relation |
 	relation ;
@@ -72,16 +71,16 @@ relation:
 term:
 	term ADDOP factor |
 	factor ;
-      
+
 factor:
 	factor MULOP primary |
 	primary ;
 
 primary:
 	'(' expression ')' |
-	INT_LITERAL | 
+	INT_LITERAL |
 	IDENTIFIER ;
-    
+
 %%
 
 void yyerror(const char* message)
@@ -89,10 +88,10 @@ void yyerror(const char* message)
 	appendError(SYNTAX, message);
 }
 
-int main(int argc, char *argv[])    
+int main(int argc, char *argv[])
 {
 	firstLine();
 	yyparse();
 	lastLine();
 	return 0;
-} 
+}
