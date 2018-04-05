@@ -40,7 +40,7 @@ parameters:
   parameter parameter;
 
 parameter:
-  IDENTIFIER ':' type
+  IDENTIFIER ':' type ;
 
 variable:
 	IDENTIFIER ':' type IS statement_ ;
@@ -66,37 +66,16 @@ operator:
 	MULOP ;
 
 case:
-  WHEN INT_LITERAL ARROW statement
-
-reductions:
-	reductions statement_ |
-	;
+  WHEN INT_LITERAL ARROW statement ;
 
 expression:
 	 '(' expression ')' |
    expression binary_operator expression |
    NOT expression |
    INT_LITERAL | REAL_LITERAL | BOOL_LITERAL |
-   IDENTIFIER
+   IDENTIFIER ;
 
-binary_operator: ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP
-
-relation:
-	relation RELOP term |
-	term;
-
-term:
-	term ADDOP factor |
-	factor ;
-
-factor:
-	factor MULOP primary |
-	primary ;
-
-primary:
-	'(' expression ')' |
-	INT_LITERAL |
-	IDENTIFIER ;
+binary_operator: ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP ;
 
 %%
 
