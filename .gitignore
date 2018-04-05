@@ -1,1 +1,4 @@
 *.txt
+parser.output
+parser.tab.c
+parser.tab.h
