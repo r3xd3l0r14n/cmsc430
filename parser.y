@@ -58,7 +58,7 @@ statement:
 	expression ; |
 	REDUCE operator {statement} ENDREDUCE ; |
   IF expression THEN statement ELSE statement ENDIF ; |
-  CASE expression IS {case} OTHERS ARROW statement ; ENDCASE ;
+  CASE expression IS {case} OTHERS ARROW statement ';' ENDCASE ;
 
 operator:
 	ADDOP |
@@ -72,7 +72,7 @@ reductions:
 	;
 
 expression:
-	 ( expression ) |
+	 '(' expression ')' |
    expression binary_operator expression |
    NOT expression |
    INT_LITERAL | REAL_LITERAL | BOOL_LITERAL |
