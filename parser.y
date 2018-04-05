@@ -25,45 +25,60 @@ void yyerror(const char* message);
 
 %%
 
-function:	
+function:
 	function_header optional_variable body ;
-	
-function_header:	
-	FUNCTION IDENTIFIER RETURNS type ';' ;
+
+function_header:
+	FUNCTION IDENTIFIER parameters RETURNS type ';' ;
 
 optional_variable:
 	variable |
 	;
 
+parameters:
+  parameter parameter;
+
+parameter:
+  IDENTIFIER ':' type
+
 variable:
 	IDENTIFIER ':' type IS statement_ ;
 
 type:
-	INTEGER |
-	BOOLEAN ;
+	INTEGER | REAL |	BOOLEAN ;
 
 body:
 	BEGIN_ statement_ END ';' ;
-    
+
 statement_:
 	statement ';' |
 	error ';' ;
-	
+
 statement:
-	expression |
-	REDUCE operator reductions ENDREDUCE ;
+	expression ; |
+	REDUCE operator {statement} ENDREDUCE ; |
+  IF expression THEN statement ELSE statement ENDIF ; |
+  CASE expression IS {case} OTHERS ARROW statement ; ENDCASE ;
 
 operator:
 	ADDOP |
 	MULOP ;
 
+case:
+  WHEN INT_LITERAL ARROW statement
+
 reductions:
 	reductions statement_ |
 	;
-		    
+
 expression:
-	expression ANDOP relation |
-	relation ;
+	 ( expression ) |
+   expression binary_operator expression |
+   NOT expression |
+   INT_LITERAL | REAL_LITERAL | BOOL_LITERAL |
+   IDENTIFIER
+
+binary_operator: ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP
 
 relation:
 	relation RELOP term |
@@ -72,16 +87,16 @@ relation:
 term:
 	term ADDOP factor |
 	factor ;
-      
+
 factor:
 	factor MULOP primary |
 	primary ;
 
 primary:
 	'(' expression ')' |
-	INT_LITERAL | 
+	INT_LITERAL |
 	IDENTIFIER ;
-    
+
 %%
 
 void yyerror(const char* message)
@@ -89,10 +104,10 @@ void yyerror(const char* message)
 	appendError(SYNTAX, message);
 }
 
-int main(int argc, char *argv[])    
+int main(int argc, char *argv[])
 {
 	firstLine();
 	yyparse();
 	lastLine();
 	return 0;
-} 
+}
