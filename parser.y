@@ -72,16 +72,57 @@ operator:
 	ADDOP |
 	MULOP ;
 
-expression:
-	'(' expression ')' |
-  expression binary_operator expression |
-  NOT expression |
+factor:
+	'(' expressions ')' |
+  NOT factor |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
   IDENTIFIER ;
 
-binary_operator:
+expressions:
+  expression |
+  expressions ',' expression
+  ;
+
+expression:
+ expression OROP term1 |
+ term1
+ ;
+
+term1:
+  term1 ANDOP term2 |
+  term2
+  ;
+
+term2:
+  term2 RELOP term3 |
+  term3
+  ;
+
+term3:
+  term3 EXPOP term4 |
+  term4
+  ;
+
+term4:
+  term4 REMOP term5 |
+  term5
+  ;
+
+term5:
+  term5 MULOP term6 |
+  term6
+  ;
+
+term6:
+  term6 ADDOP factor |
+  factor
+  ;
+
+/*binary_operator:
   ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP ;
-/*
+
+
+
 relation:
 	relation RELOP term |
 	term;
