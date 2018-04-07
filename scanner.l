@@ -57,8 +57,8 @@ returns		{ ECHO; return(RETURNS); }
 and		{ ECHO; return(ANDOP); }
 or    { ECHO; return(OROP); }
 not   { ECHO; return(NOTOP);}
-true      { ECHO; return(BOOL_LITERAL); }
-false     { ECHO; return(BOOL_LITERAL); }
+true      { ECHO; return(BOOLEAN_LITERAL); }
+false     { ECHO; return(BOOLEAN_LITERAL); }
 case      { ECHO; return(CASE); }
 else      { ECHO; return(ELSE); }
 endcase   { ECHO; return(ENDCASE); }
@@ -74,19 +74,3 @@ when      { ECHO; return(WHEN); }
 {realLit} { ECHO; return(REAL_LITERAL); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%
-
-int main()
-{
-	firstLine();
-
-	FILE *file = fopen("lexemes.txt", "wa");
-	int token = yylex();
-	while (token)
-	{
-		fprintf(file, "%d %s\n", token, yytext);
-		token = yylex();
-	}
-	lastLine();
-	fclose(file);
-	return 0;
-}
