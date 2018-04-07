@@ -56,10 +56,10 @@ int lastLine()
 void appendError(ErrorCategories errorCategory, string message)
 {
 	string messages[] = { "Lexical Error, Invalid Character ",
-	  "Syntax Error, Unexpected IDENTIFIER, expecting ",
+	  "Syntax Error, ",
 		"Semantic Error, ", "Semantic Error, Duplicate Identifier: ",
 		"Semantic Error, Undeclared " };
-		error = messages[errorCategory] + message;
+		//error = messages[errorCategory] + message;
 	if (errorCategory == 0)
 	{
 		error += messages[errorCategory]+message+"\n";
@@ -80,6 +80,6 @@ void appendError(ErrorCategories errorCategory, string message)
 void displayErrors()
 {
 	if (error != "")
-		printf("%s\n", error.c_str());
+		printf("%s", error.c_str());
 	error = "";
 }

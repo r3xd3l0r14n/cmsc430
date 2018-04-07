@@ -31,7 +31,9 @@ function:
 	function_header variables body ;
 
 function_header:
-	FUNCTION IDENTIFIER parameters RETURNS type ';' ;
+	FUNCTION IDENTIFIER parameters RETURNS type ';' |
+  error ';'
+  ;
 
 variables:
   variable ;
@@ -57,7 +59,8 @@ statement:
 	expression ';' |
 	REDUCE operator statements ENDREDUCE ';' |
   IF expression THEN statement ELSE statement ENDIF ';' |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' ;
+  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' |
+  error ';' ;
 
 statements:
  | statements statement ;
