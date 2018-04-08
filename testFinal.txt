@@ -1,0 +1,28 @@
+-- Final test
+// Developed by Colin Delorme 08April2018
+
+function main returns boolean;
+v 31+42-81/8>4;
+begin
+  case v is
+  when v => 31
+    v: 89+v;
+  when v => 51
+    v: 51+v;
+  others =>
+    v: 18+2;
+  endcase;
+
+  if v >= 144 then
+   v: 0;
+  else
+   v: 144;
+  endif;
+
+  reduce /
+    2+8;
+    6
+    3;
+    v;
+  ENDREDUCE;
+end;
