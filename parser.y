@@ -36,7 +36,12 @@ function_header:
   ;
 
 variables:
-  variable ;
+  variable_ variables |
+   ;
+
+variable_:
+  variable |
+  error ';' ;
 
 variable:
 	IDENTIFIER ':' type IS statement ;
@@ -59,8 +64,7 @@ statement:
 	expression ';' |
 	REDUCE operator statements ENDREDUCE ';' |
   IF expression THEN statement ELSE statement ENDIF ';' |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' |
-  error ';' ;
+  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' ;
 
 statements:
  | statements statement ;
@@ -120,27 +124,6 @@ term6:
   term6 ADDOP factor |
   factor
   ;
-
-/*binary_operator:
-  ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP ;
-
-relation:
-	relation RELOP term |
-	term;
-
-term:
-	term ADDOP factor |
-	factor ;
-
-factor:
-	factor MULOP primary |
-	primary ;
-
-primary:
-	'(' expression ')' |
-	INT_LITERAL |
-	IDENTIFIER ;
-  */
 
 %%
 
