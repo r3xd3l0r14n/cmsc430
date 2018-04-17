@@ -4,31 +4,53 @@
 %{
 
 #include <string>
+#include <string>
+#include <vector>
+#include <map>
 
 using namespace std;
 
+#include "values.h"
 #include "listing.h"
+#include "symbols.h"
 
 int yylex();
 void yyerror(const char* message);
+
+Symbols<int> symbols;
+
+int result;
 
 %}
 
 %error-verbose
 
-%token IDENTIFIER
-%token INT_LITERAL
+%union
+{
+  CharPtr iden;
+  Operators oper;
+  int value;
+}
 
-%token ADDOP MULOP RELOP ANDOP REMOP EXPOP OROP NOTOP
+%token <iden> IDENTIFIER
+%token <value> INT_LITERAL
+
+%token <oper> ADDOP MULOP RELOP REMOP EXPOP
+%token ANDOP OROP NOTOP
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
 %token REAL_LITERAL BOOLEAN_LITERAL NOT
 
+
+%type <value> body statement_ statement reductions expression relation term
+	factor primary
+%type <oper> operator
+
 %%
 
 function:
-	function_header variables body ;
+	function_header variables body {result = $3;};
 
 function_header:
 	FUNCTION IDENTIFIER parameters RETURNS type ';' |
@@ -58,11 +80,11 @@ type:
 	BOOLEAN ;
 
 body:
-	BEGIN_ statement END ';' ;
+	BEGIN_ statement END ';' {$$ = $2;} ;
 
 statement:
 	expression ';' |
-	REDUCE operator statements ENDREDUCE ';' |
+	REDUCE operator statements ENDREDUCE {$$ = $3;} ';' |
   IF expression THEN statement ELSE statement ENDIF ';' |
   CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' ;
 
@@ -80,10 +102,10 @@ operator:
 	MULOP ;
 
 factor:
-	'(' expressions ')' |
+	'(' expressions ')' {$$ = $2;} |
   NOT factor |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
-  IDENTIFIER ;
+  IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
 expressions:
   expression |
@@ -136,6 +158,7 @@ int main(int argc, char *argv[])
 {
 	firstLine();
 	yyparse();
-	lastLine();
+	if (lastLine() == 0)
+    cout << "Result = " << result << endl;
 	return 0;
 }
