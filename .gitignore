@@ -2,3 +2,7 @@
 parser.output
 parser.tab.c
 parser.tab.h
+compile
+*.o
+parser.c
+scanner.c
