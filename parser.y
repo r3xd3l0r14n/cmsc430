@@ -43,8 +43,9 @@ int result;
 %token REAL_LITERAL BOOLEAN_LITERAL NOT
 
 
-%type <value> body statement_ statement reductions expression relation term
-	factor primary
+%type <value> body statements statement reductions expressions expression relation term1 term2
+  term3 term4 term5 term6
+	factor primary cases case
 %type <oper> operator
 
 %%
@@ -66,7 +67,7 @@ variable_:
   error ';' ;
 
 variable:
-	IDENTIFIER ':' type IS statement ;
+	IDENTIFIER ':' type IS statement {symbols.insert($1, $5);} ;
 
 parameters:
   | parameters parameter ;
@@ -84,12 +85,12 @@ body:
 
 statement:
 	expression ';' |
-	REDUCE operator statements ENDREDUCE {$$ = $3;} ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' ;
+	REDUCE operator statements ENDREDUCE ';' {$$ = $3;} |
+  IF expression THEN statement ELSE statement ENDIF ';' {$$ = $3;}  |
+  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' {$$ = $3;} ;
 
 statements:
- | statements statement ;
+ | statements statement {$$ = $0;};
 
 cases:
   | cases case ;
@@ -113,37 +114,37 @@ expressions:
   ;
 
 expression:
- expression OROP term1 |
+ expression OROP term1  |
  term1
  ;
 
 term1:
-  term1 ANDOP term2 |
+  term1 ANDOP term2 {$$ = $1 && $3;} |
   term2
   ;
 
 term2:
-  term2 RELOP term3 |
+  term2 RELOP term3 {$$ = evaluateRelational($1, $2,$3);} |
   term3
   ;
 
 term3:
-  term3 EXPOP term4 |
+  term3 EXPOP term4 {$$ = evaluateADD($1, $2,$3);} |
   term4
   ;
 
 term4:
-  term4 REMOP term5 |
+  term4 REMOP term5 {$$ = evaluateADD($1, $2,$3);} |
   term5
   ;
 
 term5:
-  term5 MULOP term6 |
+  term5 MULOP term6 {$$ = evaluateADD($1, $2,$3);} |
   term6
   ;
 
 term6:
-  term6 ADDOP factor |
+  term6 ADDOP factor {$$ = evaluateADD($1, $2,$3);} |
   factor
   ;
 
