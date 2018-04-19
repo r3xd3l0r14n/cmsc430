@@ -113,7 +113,7 @@ expressions:
   ;
 
 expression:
- expression OROP term1  |
+ expression OROP term1 {$$ = $1 || $3};  |
  term1
  ;
 
