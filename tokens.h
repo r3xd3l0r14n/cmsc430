@@ -50,9 +50,9 @@ extern int yydebug;
     ADDOP = 260,
     MULOP = 261,
     RELOP = 262,
-    ANDOP = 263,
-    REMOP = 264,
-    EXPOP = 265,
+    REMOP = 263,
+    EXPOP = 264,
+    ANDOP = 265,
     OROP = 266,
     NOTOP = 267,
     BEGIN_ = 268,
@@ -82,7 +82,19 @@ extern int yydebug;
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
-typedef int YYSTYPE;
+
+union YYSTYPE
+{
+#line 29 "parser.y" /* yacc.c:1909  */
+
+  CharPtr iden;
+  Operators oper;
+  int value;
+
+#line 95 "parser.tab.h" /* yacc.c:1909  */
+};
+
+typedef union YYSTYPE YYSTYPE;
 # define YYSTYPE_IS_TRIVIAL 1
 # define YYSTYPE_IS_DECLARED 1
 #endif

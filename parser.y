@@ -43,9 +43,9 @@ int result;
 %token REAL_LITERAL BOOLEAN_LITERAL NOT
 
 
-%type <value> body statements statement reductions expressions expression relation term1 term2
+%type <value> body statement expressions expression term1 term2
   term3 term4 term5 term6
-	factor primary cases case
+	factor cases case
 %type <oper> operator
 
 %%
@@ -85,22 +85,21 @@ body:
 
 statement:
 	expression ';' |
-	REDUCE operator statements ENDREDUCE ';' {$$ = $3;} |
-  IF expression THEN statement ELSE statement ENDIF ';' {$$ = $3;}  |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' {$$ = $3;} ;
+  IF expression THEN statement ELSE statement ENDIF ';'  |
+  CASE expression IS cases OTHERS ARROW statement ENDCASE ';';
 
-statements:
- | statements statement {$$ = $0;};
+/**statements:
+ | statements statement;**/
 
 cases:
-  | cases case ;
+  case | cases case ;
 
 case:
   WHEN INT_LITERAL ARROW statement ;
 
 operator:
-	ADDOP |
-	MULOP ;
+  ADDOP |
+  MULOP ;
 
 factor:
 	'(' expressions ')' {$$ = $2;} |
