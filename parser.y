@@ -3,7 +3,7 @@
 
 %{
 
-#include <string>
+#include <iostream>
 #include <string>
 #include <vector>
 #include <map>
@@ -46,7 +46,6 @@ int result;
 %type <value> body statement expressions expression term1 term2
   term3 term4 term5 term6
 	factor cases case
-%type <oper> operator
 
 %%
 
@@ -85,8 +84,8 @@ body:
 
 statement:
 	expression ';' |
-  IF expression THEN statement ELSE statement ENDIF ';'  |
-  CASE expression IS cases OTHERS ARROW statement ENDCASE ';';
+  IF expression THEN statement ELSE statement ENDIF ';' {$$ = evaluateif($1, $3,$5);}  |
+  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = evaluatecase($1, $3,$5);;
 
 /**statements:
  | statements statement;**/
@@ -103,8 +102,8 @@ operator:
 
 factor:
 	'(' expressions ')' {$$ = $2;} |
-  NOT factor |
-  INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
+  NOT factor {$$ = $1} |
+  INT_LITERAL {$$ = $3} | REAL_LITERAL {$$ = $3} | BOOLEAN_LITERAL {$$ = $3} |
   IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
 expressions:
