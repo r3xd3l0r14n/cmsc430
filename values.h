@@ -9,3 +9,4 @@ enum Operators {LESS, ADD, MULTIPLY, SUBTRACT, DIVIDE,REM,EQL,DIVA,GRT,GREATEREQ
 int evaluateReduction(Operators operator_, int head, int tail);
 int evaluateRelational(int left, Operators operator_, int right);
 int evaluateADD(int left, Operators operator_, int right);
+int evaluateif(int left Operators operator_ int right);
