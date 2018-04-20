@@ -84,7 +84,7 @@ body:
 
 statement:
 	expression ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' {$$ = evaluateif($1, $3,$5);}  |
+  IF expression THEN statement ELSE statement ENDIF ';' {$$ = $1 ? $4:$6 ;}  |
   CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = evaluatecase($1);};
 
 /**statements:
@@ -103,7 +103,7 @@ operator:
 factor:
 	'(' expressions ')' {$$ = $2;} |
   NOT factor {$$ = $1} |
-  INT_LITERAL {$$ = $3} | REAL_LITERAL {$$ = $3} | BOOLEAN_LITERAL {$$ = $3} |
+  INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
   IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
 expressions:
@@ -122,7 +122,7 @@ term1:
   ;
 
 term2:
-  term2 RELOP term3 {$$ = evaluateRelational($1, $2,$3);} |
+  term2 RELOP term3 {$$ = evaluateRelational($1, $2, $3);} |
   term3
   ;
 
