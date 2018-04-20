@@ -85,7 +85,7 @@ body:
 statement:
 	expression ';' |
   IF expression THEN statement ELSE statement ENDIF ';' {$$ = evaluateif($1, $3,$5);}  |
-  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = evaluatecase($1, $3,$5);;
+  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = evaluatecase($1);};
 
 /**statements:
  | statements statement;**/
