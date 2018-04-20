@@ -58,8 +58,8 @@ returns		{ ECHO; return(RETURNS); }
 and		{ ECHO; return(ANDOP); }
 or    { ECHO; return(OROP); }
 not   { ECHO; return(NOTOP);}
-true      { ECHO; return(BOOLEAN_LITERAL); }
-false     { ECHO; return(BOOLEAN_LITERAL); }
+true      { ECHO; yylval.oper=1; return(BOOLEAN_LITERAL); }
+false     { ECHO; yylval.oper=0; return(BOOLEAN_LITERAL); }
 case      { ECHO; return(CASE); }
 else      { ECHO; return(ELSE); }
 endcase   { ECHO; return(ENDCASE); }
