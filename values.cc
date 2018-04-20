@@ -83,4 +83,17 @@ int evaluateif(int left)
 	{
 		result = false;
 	}
+	return result;
+}
+int evaluatecase(int left)
+{
+	int result;
+	switch (left)
+	{
+		case True:
+			result = True;
+		case False:
+			result = False;
+	}
+	return result;
 }
