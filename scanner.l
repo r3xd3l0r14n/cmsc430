@@ -73,6 +73,6 @@ when      { ECHO; return(WHEN); }
   strcpy(yylval.iden, yytext); return(IDENTIFIER);}
 {int}		{ ECHO; yylval.value = atoi(yytext); return(INT_LITERAL); }
 {punc}		{ ECHO; return(yytext[0]); }
-{realLit} { ECHO; return(REAL_LITERAL); }
+{realLit} { ECHO; yylval.value = atof(yytext); return(REAL_LITERAL); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%
