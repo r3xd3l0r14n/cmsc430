@@ -6,7 +6,7 @@ class Symbols
 {
 public:
 	void insert(char* lexeme, T entry);
-	bool find(char* lexeme, T& entry);
+	bool find(char* lexeme, T entry);
 private:
 	map<string, T> symbols;
 };
