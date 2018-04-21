@@ -6,6 +6,7 @@
 #include <string>
 #include <vector>
 #include <cmath>
+#include <math.>
 
 using namespace std;
 
@@ -68,7 +69,7 @@ int evaluateADD(int left, Operators operator_, int right)
 			result = left % right;
 			break;
 		case EXOP:
-			result = left ** right;
+			result = pow(left, right);
 			break;
 	}
 	return result;
