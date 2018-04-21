@@ -44,7 +44,7 @@ rem		{ ECHO; yylval.oper = REM; return(MULOP); }
 ">"   { ECHO; yylval.oper = GRT; return(RELOP); }
 ">="  { ECHO; yylval.oper = GREATEREQL; return(RELOP); }
 "<="  { ECHO; yylval.oper = LESSEQL; return(RELOP); }
-"**"  { ECHO; yylval.oper = EXP; return(EXPOP); }
+"**"  { ECHO; yylval.oper = EXOP; return(EXPOP); }
 "=>"  { ECHO; return(ARROW); }
 begin		{ ECHO; return(BEGIN_); }
 boolean		{ ECHO; return(BOOLEAN); }
