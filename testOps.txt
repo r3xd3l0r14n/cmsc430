@@ -1,12 +1,16 @@
-//Missing Operator in expression
+//Professor YYSTYPE_IS_TRIVIAL
 
-function testOperators returns integer;
-  a: 12
-  b: 41
+function main a: integer, b: integer returns integer;
+  c: integer is
+      if a > b then
+        a rem b;
+      else
+        a ** 2;
+      endif;
 begin
-  if a > b then
-    b: a + b;
-  else
-    b: b/a;
-  endif;
+  case a is
+    when 1 => c;
+    when 2 => (a + b / 2 - 4) * 3;
+    others => 4;
+  endcase;
 end;
