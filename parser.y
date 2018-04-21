@@ -131,7 +131,7 @@ term5:
   ;
 
 term6:
-  NOTOP primary {$$ = evaluateADD($1, $2,$3);} |
+  NOTOP primary |
   primary
   ;
 
