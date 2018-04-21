@@ -47,35 +47,35 @@ extern int yydebug;
   {
     IDENTIFIER = 258,
     INT_LITERAL = 259,
-    ADDOP = 260,
-    MULOP = 261,
-    RELOP = 262,
-    REMOP = 263,
-    EXPOP = 264,
-    ANDOP = 265,
-    OROP = 266,
-    NOTOP = 267,
-    BEGIN_ = 268,
-    BOOLEAN = 269,
-    END = 270,
-    ENDREDUCE = 271,
-    FUNCTION = 272,
-    INTEGER = 273,
-    IS = 274,
-    REDUCE = 275,
-    RETURNS = 276,
-    REAL = 277,
-    IF = 278,
-    THEN = 279,
-    ELSE = 280,
-    ENDIF = 281,
-    CASE = 282,
-    OTHERS = 283,
-    ARROW = 284,
-    ENDCASE = 285,
-    WHEN = 286,
-    REAL_LITERAL = 287,
-    BOOLEAN_LITERAL = 288,
+    REAL_LITERAL = 260,
+    BOOLEAN_LITERAL = 261,
+    ADDOP = 262,
+    MULOP = 263,
+    RELOP = 264,
+    REMOP = 265,
+    EXPOP = 266,
+    ANDOP = 267,
+    OROP = 268,
+    NOTOP = 269,
+    BEGIN_ = 270,
+    BOOLEAN = 271,
+    END = 272,
+    ENDREDUCE = 273,
+    FUNCTION = 274,
+    INTEGER = 275,
+    IS = 276,
+    REDUCE = 277,
+    RETURNS = 278,
+    REAL = 279,
+    IF = 280,
+    THEN = 281,
+    ELSE = 282,
+    ENDIF = 283,
+    CASE = 284,
+    OTHERS = 285,
+    ARROW = 286,
+    ENDCASE = 287,
+    WHEN = 288,
     NOT = 289
   };
 #endif
@@ -89,7 +89,7 @@ union YYSTYPE
 
   CharPtr iden;
   Operators oper;
-  int value;
+  double value;
 
 #line 95 "parser.tab.h" /* yacc.c:1909  */
 };

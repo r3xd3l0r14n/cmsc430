@@ -40,12 +40,10 @@ int result;
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
-%token NOT statement
+%token NOT 
 
 
-%type <value> body statements statement expressions expression term1 term2
-%type <value> term3 term4 term5 term6
-%type <value>	factor cases case
+%type <value> body statement expressions expression term1 term2 term3 term4 term5 term6 factor cases case
 
 %%
 
@@ -84,7 +82,7 @@ body:
 
 statement:
 	expression ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' {$$ = $1 ? $4:$6 ;}  |
+  IF expression THEN statement ELSE statement ENDIF ';' {$$=($<value>2 == 1) ? $4:$6 ;}  |
   CASE expression IS cases OTHERS ARROW statement ENDCASE ';' ;
 
 /**statements:
@@ -102,7 +100,7 @@ operator:
 
 factor:
 	'(' expressions ')' {$$ = $2;} |
-  NOT factor {$$ = $1} |
+  NOT factor {$$ = $<value>1} |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
   IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
