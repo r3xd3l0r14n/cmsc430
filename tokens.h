@@ -89,7 +89,7 @@ union YYSTYPE
 
   CharPtr iden;
   Operators oper;
-  double value;
+  int value;
 
 #line 95 "parser.tab.h" /* yacc.c:1909  */
 };

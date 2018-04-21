@@ -94,19 +94,13 @@ case:
   WHEN INT_LITERAL ARROW statement {$$ = $2;} ;
 
 
-factor:
-	'(' expressions ')' {$$ = $2;} |
-  NOT factor {$$ = $<value>1;} |
+primary:
+	'(' expression ')' {$$ = $2;} |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
   IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
-expressions:
-  expression |
-  expressions ',' expression
-  ;
-
 expression:
- expression OROP term1  |
+ expression OROP term1 {$$ = $1 || $3;}  |
  term1
  ;
 
@@ -121,23 +115,24 @@ term2:
   ;
 
 term3:
-  term3 EXPOP term4 {$$ = evaluateADD($1, $2,$3);} |
+  term3 ADDOP term4 {$$ = evaluateADD($1, $2,$3);} |
   term4
   ;
 
 term4:
+  term4 MULOP term5 {$$ = evaluateADD($1, $2,$3);} |
   term4 REMOP term5 {$$ = evaluateADD($1, $2,$3);} |
   term5
   ;
 
 term5:
-  term5 MULOP term6 {$$ = evaluateADD($1, $2,$3);} |
+  term5 EXPOP term6 {$$ = evaluateADD($1, $2,$3);} |
   term6
   ;
 
 term6:
-  term6 ADDOP factor {$$ = evaluateADD($1, $2,$3);} |
-  factor
+  NOTOP primary {$$ = evaluateADD($1, $2,$3);} |
+  primary
   ;
 
 %%
