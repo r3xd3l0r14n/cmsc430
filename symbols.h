@@ -6,7 +6,7 @@ class Symbols
 {
 public:
 	void insert(char* lexeme, T entry);
-	bool find(char* lexeme, T entry);
+	bool find(char* lexeme, T& entry);
 private:
 	map<string, T> symbols;
 };
@@ -19,7 +19,7 @@ void Symbols<T>::insert(char* lexeme, T entry)
 }
 
 template <typename T>
-bool Symbols<T>::find(char* lexeme, T entry)
+bool Symbols<T>::find(char* lexeme, T& entry)
 {
 	string name(lexeme);
 	typedef typename map<string, T>::iterator Iterator;

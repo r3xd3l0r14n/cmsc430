@@ -29,7 +29,7 @@ int result;
 {
   CharPtr iden;
   Operators oper;
-  double value;
+  int value;
 }
 
 %token <iden> IDENTIFIER
@@ -41,7 +41,6 @@ int result;
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
 %token NOT
-
 
 %type <value> body statement expressions expression term1 term2 term3 term4 term5 term6 factor cases case
 
