@@ -73,19 +73,7 @@ int evaluateADD(int left, Operators operator_, int right)
 	}
 	return result;
 }
-int evaluateif(int left)
-{
-	int result;
-	if left
-	{
-		result = true;
-	} else
-	{
-		result = false;
-	}
-	return result;
-}
-int evaluatecase(int left)
+/*int evaluatecase(int left)
 {
 	int result;
 	switch (left)
@@ -96,4 +84,4 @@ int evaluatecase(int left)
 			result = False;
 	}
 	return result;
-}
+}*/
