@@ -83,7 +83,7 @@ body:
 statement:
 	expression ';' |
   IF expression THEN statement ELSE statement ENDIF ';' {$$=($<value>2 == 1) ? $4:$6 ;}  |
-  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = $7;} ;
+  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = $2;} ;
 
 /**statements:
  | statements statement;**/
@@ -92,7 +92,7 @@ cases:
   case | cases case ;
 
 case:
-  WHEN INT_LITERAL ARROW statement {$$ = $7;} ;
+  WHEN INT_LITERAL ARROW statement {$$ = $2;} ;
 
 
 factor:
