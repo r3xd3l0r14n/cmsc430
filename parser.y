@@ -97,7 +97,7 @@ case:
 
 factor:
 	'(' expressions ')' {$$ = $2;} |
-  NOT factor {$$ = $<value>1} |
+  NOT factor {$$ = $<value>1;} |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
   IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
 
