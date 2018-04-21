@@ -42,7 +42,7 @@ int result;
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
 %token NOT
 
-%type <value> body statement expressions expression term1 term2 term3 term4 term5 term6 factor cases case
+%type <value> body statement expression term1 term2 term3 term4 term5 term6 cases case primary
 
 %%
 
