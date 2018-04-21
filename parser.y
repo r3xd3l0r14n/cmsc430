@@ -33,7 +33,7 @@ int result;
 }
 
 %token <iden> IDENTIFIER
-%token <value> INT_LITERAL
+%token <value> INT_LITERAL REAL_LITERAL BOOLEAN_LITERAL
 
 %token <oper> ADDOP MULOP RELOP REMOP EXPOP
 %token ANDOP OROP NOTOP
@@ -43,9 +43,9 @@ int result;
 %token REAL_LITERAL BOOLEAN_LITERAL NOT
 
 
-%type <value> body statement expressions expression term1 term2
-  term3 term4 term5 term6
-	factor cases case
+%type <value> body statements statement expressions expression term1 term2
+%type <value> term3 term4 term5 term6
+%type <value>	factor cases case
 
 %%
 
@@ -85,7 +85,7 @@ body:
 statement:
 	expression ';' |
   IF expression THEN statement ELSE statement ENDIF ';' {$$ = $1 ? $4:$6 ;}  |
-  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = evaluatecase($1);};
+  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' ;
 
 /**statements:
  | statements statement;**/
