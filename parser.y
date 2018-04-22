@@ -21,6 +21,8 @@ Symbols<int> symbols;
 
 int result;
 
+static int *args;
+static int counter;
 %}
 
 %error-verbose
@@ -43,7 +45,7 @@ int result;
 %token NOT
 
 %type <value> body statement expression term1 term2 term3 term4 term5 term6 cases case primary
-
+%type <value> parameter
 %%
 
 function:
@@ -66,10 +68,12 @@ variable:
 	IDENTIFIER ':' type IS statement {symbols.insert($1, $5);} ;
 
 parameters:
-  | parameters parameter ;
+  |
+  parameter |
+  parameters ',' parameter ;
 
 parameter:
-  IDENTIFIER ':' type
+  IDENTIFIER ':' type {$$ = args[counter++];};
 
 type:
 	INTEGER |
@@ -145,6 +149,10 @@ void yyerror(const char* message)
 int main(int argc, char *argv[])
 {
 	firstLine();
+  int args[argc];
+  for (int i = 0; i < argc; i++){
+    args[i] = atoi(argv[i]);
+  }
 	yyparse();
 	if (lastLine() == 0)
     cout << "Result = " << result << endl;

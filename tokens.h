@@ -85,7 +85,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 29 "parser.y" /* yacc.c:1909  */
+#line 31 "parser.y" /* yacc.c:1909  */
 
   CharPtr iden;
   Operators oper;
