@@ -1,0 +1,4 @@
+function main returns integer;
+begin
+  9 + 2 - (5 - 1) / 2 rem 3 * 3 ** 2;
+end;

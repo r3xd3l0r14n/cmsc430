@@ -1,0 +1,6 @@
+function main a: integer, b: integer returns integer;
+c: integer is 15
+d: integer is 10
+begin
+  a + b + c + d;
+end;

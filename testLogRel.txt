@@ -1,0 +1,23 @@
+function main returns integer;
+a: integer is 5;
+c: integer is
+  if a >= 5 then
+    a + 2;
+  else
+    a * 2;
+  endif;
+d: integer is
+  if a <= 4 then
+    a / 2;
+  else
+    a ** 2;
+  endif;
+e: integer is
+  if c > 99 then
+    c - 97;
+  else
+    c + 53;
+  endif;
+begin
+  e + d;
+end;

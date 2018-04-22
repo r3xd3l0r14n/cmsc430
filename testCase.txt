@@ -1,0 +1,9 @@
+function main returns integer;
+a: integer is 15;
+b: integer is 12;
+begin
+  case a is
+    when 10 => b;
+    when 15 => (a+b);
+  endcase;
+end;
