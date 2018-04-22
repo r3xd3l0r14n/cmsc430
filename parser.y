@@ -17,11 +17,11 @@ using namespace std;
 int yylex();
 void yyerror(const char* message);
 
-Symbols<int> symbols;
+Symbols<double> symbols;
 
 int result;
 
-static int *args;
+static double* args;
 static int counter;
 %}
 
@@ -31,7 +31,7 @@ static int counter;
 {
   CharPtr iden;
   Operators oper;
-  int value;
+  double value;
 }
 
 %token <iden> IDENTIFIER
@@ -73,7 +73,7 @@ parameters:
   parameters ',' parameter ;
 
 parameter:
-  IDENTIFIER ':' type {$$ = args[counter++];};
+  IDENTIFIER ':' type {symbols.insert($1, args[counter++]);};
 
 type:
 	INTEGER |
@@ -149,9 +149,9 @@ void yyerror(const char* message)
 int main(int argc, char *argv[])
 {
 	firstLine();
-  int args[argc];
+  args = new double[argc-1];
   for (int i = 0; i < argc; i++){
-    args[i] = atoi(argv[i]);
+    args[i-1] = atof(argv[i]);
   }
 	yyparse();
 	if (lastLine() == 0)
