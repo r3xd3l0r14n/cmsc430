@@ -38,7 +38,7 @@ Types checkLogical(Types left, Types right)
 	{
 		appendError(GENERAL_SEMANTIC, "Boolean Type Required");
 		return MISMATCH;
-	}	
+	}
 		return BOOL_TYPE;
 	return MISMATCH;
 }
@@ -48,4 +48,8 @@ Types checkRelational(Types left, Types right)
 	if (checkArithmetic(left, right) == MISMATCH)
 		return MISMATCH;
 	return BOOL_TYPE;
+}
+Types checkIfThen(Types left, Types right)
+{
+	return BOOL_TYPE
 }
