@@ -3,53 +3,32 @@
 
 %{
 
-#include <iostream>
 #include <string>
-#include <vector>
-#include <map>
 
 using namespace std;
 
-#include "values.h"
 #include "listing.h"
-#include "symbols.h"
 
 int yylex();
 void yyerror(const char* message);
 
-Symbols<double> symbols;
-
-int result;
-
-static double* args;
-static int counter;
 %}
 
 %error-verbose
 
-%union
-{
-  CharPtr iden;
-  Operators oper;
-  double value;
-}
+%token IDENTIFIER
+%token INT_LITERAL
 
-%token <iden> IDENTIFIER
-%token <value> INT_LITERAL REAL_LITERAL BOOLEAN_LITERAL
-
-%token <oper> ADDOP MULOP RELOP REMOP EXPOP
-%token ANDOP OROP NOTOP
+%token ADDOP MULOP RELOP ANDOP REMOP EXPOP OROP NOTOP
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
-%token NOT
+%token REAL_LITERAL BOOLEAN_LITERAL NOT
 
-%type <value> body statement expression term1 term2 term3 term4 term5 term6 cases case primary
-%type <value> parameter
 %%
 
 function:
-	function_header variables body {result = $3;};
+	function_header variables body ;
 
 function_header:
 	FUNCTION IDENTIFIER parameters RETURNS type ';' |
@@ -57,23 +36,16 @@ function_header:
   ;
 
 variables:
-  variable_ variables |
-   ;
-
-variable_:
-  variable |
-  error ';' ;
+  variable ;
 
 variable:
-	IDENTIFIER ':' type IS statement {symbols.insert($1, $5);} ;
+	IDENTIFIER ':' type IS statement ;
 
 parameters:
-  |
-  parameter |
-  parameters ',' parameter ;
+  | parameters parameter ;
 
 parameter:
-  IDENTIFIER ':' type {symbols.insert($1, args[counter++]);};
+  IDENTIFIER ':' type
 
 type:
 	INTEGER |
@@ -81,63 +53,94 @@ type:
 	BOOLEAN ;
 
 body:
-	BEGIN_ statement END ';' {$$ = $2;} ;
+	BEGIN_ statement END ';' ;
 
 statement:
 	expression ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' {$$=($<value>2 == 1) ? $4:$6 ;}  |
-  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$ = $2;} ;
+	REDUCE operator statements ENDREDUCE ';' |
+  IF expression THEN statement ELSE statement ENDIF ';' |
+  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' |
+  error ';' ;
 
-/**statements:
- | statements statement;**/
+statements:
+ | statements statement ;
 
 cases:
-  case | cases case ;
+  | cases case ;
 
 case:
-  WHEN INT_LITERAL ARROW statement {$$ = $2;} ;
+  WHEN INT_LITERAL ARROW statement ;
 
+operator:
+	ADDOP |
+	MULOP ;
 
-primary:
-	'(' expression ')' {$$ = $2;} |
+factor:
+	'(' expressions ')' |
+  NOT factor |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
-  IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);} ;
+  IDENTIFIER ;
+
+expressions:
+  expression |
+  expressions ',' expression
+  ;
 
 expression:
- expression OROP term1 {$$ = $1 || $3;}  |
+ expression OROP term1 |
  term1
  ;
 
 term1:
-  term1 ANDOP term2 {$$ = $1 && $3;} |
+  term1 ANDOP term2 |
   term2
   ;
 
 term2:
-  term2 RELOP term3 {$$ = evaluateRelational($1, $2, $3);} |
+  term2 RELOP term3 |
   term3
   ;
 
 term3:
-  term3 ADDOP term4 {$$ = evaluateADD($1, $2,$3);} |
+  term3 EXPOP term4 |
   term4
   ;
 
 term4:
-  term4 MULOP term5 {$$ = evaluateADD($1, $2,$3);} |
-  term4 REMOP term5 {$$ = evaluateADD($1, $2,$3);} |
+  term4 REMOP term5 |
   term5
   ;
 
 term5:
-  term5 EXPOP term6 {$$ = evaluateADD($1, $2,$3);} |
+  term5 MULOP term6 |
   term6
   ;
 
 term6:
-  NOTOP primary |
-  primary
+  term6 ADDOP factor |
+  factor
   ;
+
+/*binary_operator:
+  ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP ;
+
+relation:
+	relation RELOP term |
+	term;
+
+term:
+	term ADDOP factor |
+	factor ;
+
+factor:
+	factor MULOP primary |
+	primary ;
+
+primary:
+	'(' expression ')' |
+	INT_LITERAL |
+	IDENTIFIER ;
+  */
 
 %%
 
@@ -149,12 +152,7 @@ void yyerror(const char* message)
 int main(int argc, char *argv[])
 {
 	firstLine();
-  args = new double[argc-1];
-  for (int i = 0; i < argc; i++){
-    args[i-1] = atof(argv[i]);
-  }
 	yyparse();
-	if (lastLine() == 0)
-    cout << "Result = " << result << endl;
+	lastLine();
 	return 0;
 }
