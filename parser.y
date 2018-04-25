@@ -4,26 +4,40 @@
 %{
 
 #include <string>
+#include <vector>
+#include <map>
 
 using namespace std;
 
 #include "listing.h"
+#include "types.h"
+#include "symbols.h"
 
 int yylex();
 void yyerror(const char* message);
+
+Symbols<Types> symbols;
 
 %}
 
 %error-verbose
 
-%token IDENTIFIER
-%token INT_LITERAL
+%union
+{
+	CharPtr iden;
+	Types type;
+}
+
+%token <iden> IDENTIFIER
+%token <type> INT_LITERAL BOOLEAN_LITERAL REAL_LITERAL
 
 %token ADDOP MULOP RELOP ANDOP REMOP EXPOP OROP NOTOP
 
 %token BEGIN_ BOOLEAN END ENDREDUCE FUNCTION INTEGER IS REDUCE RETURNS
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
-%token REAL_LITERAL BOOLEAN_LITERAL NOT
+%token NOT
+
+%type <type> type statement statements expressions expression
 
 %%
 
@@ -36,34 +50,42 @@ function_header:
   ;
 
 variables:
-  variable ;
+  variable_ variables |
+  ;
+variable_:
+  variable |
+  error ';';
 
 variable:
-	IDENTIFIER ':' type IS statement ;
+	IDENTIFIER ':' type IS statement_
+  {checkAssignment($3, $5, "Variable Initialization");
+  symbols.insert($1,$3);} ;
 
 parameters:
-  | parameters parameter ;
+  |
+  parameter |
+  parameters parameter ;
 
 parameter:
-  IDENTIFIER ':' type
+  IDENTIFIER ':' type;
 
 type:
-	INTEGER |
-  REAL |
-	BOOLEAN ;
+	INTEGER {$$= INT_TYPE;} |
+  REAL {$$ = REAL_TYPE;} |
+	BOOLEAN {$$ = BOOL_TYPE;} ;
 
 body:
-	BEGIN_ statement END ';' ;
+	BEGIN_ statement_ END ';' ;
+
+statement_:
+  statement ';' |
+  error ';' {$$ = MISMATCH};
 
 statement:
 	expression ';' |
-	REDUCE operator statements ENDREDUCE ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' |
+  IF expression THEN statement ELSE statement ENDIF ';' {$$ = $3} |
+  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' {$$=$3} |
   error ';' ;
-
-statements:
- | statements statement ;
 
 cases:
   | cases case ;
@@ -71,29 +93,19 @@ cases:
 case:
   WHEN INT_LITERAL ARROW statement ;
 
-operator:
-	ADDOP |
-	MULOP ;
-
-factor:
-	'(' expressions ')' |
-  NOT factor |
+primary:
+  '(' expression ')' |
   INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
   IDENTIFIER ;
 
-expressions:
-  expression |
-  expressions ',' expression
-  ;
-
 expression:
- expression OROP term1 |
- term1
- ;
-
+  expression OROP term1 |
+  term1
+  ;
+  
 term1:
   term1 ANDOP term2 |
-  term2
+  term1
   ;
 
 term2:
@@ -102,45 +114,26 @@ term2:
   ;
 
 term3:
-  term3 EXPOP term4 |
+  term3 ADDOP term4 |
   term4
   ;
 
 term4:
+  term4 MULOP term5 |
   term4 REMOP term5 |
   term5
   ;
 
 term5:
-  term5 MULOP term6 |
+  term5 EXPOP term6 |
   term6
   ;
 
 term6:
-  term6 ADDOP factor |
-  factor
+  NOTOP primary |
+  primary
   ;
 
-/*binary_operator:
-  ADDOP | MULOP | REMOP | EXPOP | RELOP | ANDOP | OROP ;
-
-relation:
-	relation RELOP term |
-	term;
-
-term:
-	term ADDOP factor |
-	factor ;
-
-factor:
-	factor MULOP primary |
-	primary ;
-
-primary:
-	'(' expression ')' |
-	INT_LITERAL |
-	IDENTIFIER ;
-  */
 
 %%
 
