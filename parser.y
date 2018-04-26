@@ -37,7 +37,8 @@ Symbols<Types> symbols;
 %token REAL IF THEN ELSE ENDIF CASE OTHERS ARROW ENDCASE WHEN
 %token NOT
 
-%type <type> type statement statements expressions expression
+%type <type> type statement statement_ expression primary term1 term2 term3 term4 term5 term6
+
 
 %%
 
@@ -102,7 +103,7 @@ expression:
   expression OROP term1 |
   term1
   ;
-  
+
 term1:
   term1 ANDOP term2 |
   term1
