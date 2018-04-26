@@ -1,0 +1,388 @@
+Nonterminals useless in grammar
+
+   statement
+   cases
+   case
+   expression
+   term1
+   term2
+   term3
+   term4
+   term5
+   term6
+   primary
+
+
+Terminals unused in grammar
+
+   INT_LITERAL
+   BOOLEAN_LITERAL
+   REAL_LITERAL
+   ADDOP
+   MULOP
+   RELOP
+   ANDOP
+   REMOP
+   EXPOP
+   OROP
+   NOTOP
+   ENDREDUCE
+   REDUCE
+   IF
+   THEN
+   ELSE
+   ENDIF
+   CASE
+   OTHERS
+   ARROW
+   ENDCASE
+   WHEN
+   NOT
+   '('
+   ')'
+
+
+Rules useless in grammar
+
+   12 statement_: statement ';'
+
+   13 statement: expression
+   14          | IF expression THEN statement ELSE statement ENDIF
+   15          | CASE expression IS cases OTHERS ARROW statement ENDCASE ';'
+
+   16 cases: %empty
+   17      | cases case
+
+   18 case: WHEN INT_LITERAL ARROW statement
+
+   19 expression: expression OROP term1
+   20           | term1
+
+   21 term1: term1 ANDOP term2
+   22      | term1
+
+   23 term2: term2 RELOP term3
+   24      | term3
+
+   25 term3: term3 ADDOP term4
+   26      | term4
+
+   27 term4: term4 MULOP term5
+   28      | term4 REMOP term5
+   29      | term5
+
+   30 term5: term5 EXPOP term6
+   31      | term6
+
+   32 term6: NOTOP primary
+   33      | primary
+
+   34 primary: '(' expression ')'
+   35        | INT_LITERAL
+   36        | REAL_LITERAL
+   37        | BOOLEAN_LITERAL
+   38        | IDENTIFIER
+
+
+Grammar
+
+    0 $accept: function $end
+
+    1 function: function_header optional_variable body
+
+    2 function_header: FUNCTION IDENTIFIER RETURNS type ';'
+    3                | error ';'
+
+    4 optional_variable: variable
+    5                  | %empty
+
+    6 variable: IDENTIFIER ':' type IS statement_
+
+    7 type: INTEGER
+    8     | REAL
+    9     | BOOLEAN
+
+   10 body: BEGIN_ statement_ END ';'
+
+   11 statement_: error ';'
+
+
+Terminals, with rules where they appear
+
+$end (0) 0
+'(' (40)
+')' (41)
+':' (58) 6
+';' (59) 2 3 10 11
+error (256) 3 11
+IDENTIFIER (258) 2 6
+INT_LITERAL (259)
+BOOLEAN_LITERAL (260)
+REAL_LITERAL (261)
+ADDOP (262)
+MULOP (263)
+RELOP (264)
+ANDOP (265)
+REMOP (266)
+EXPOP (267)
+OROP (268)
+NOTOP (269)
+BEGIN_ (270) 10
+BOOLEAN (271) 9
+END (272) 10
+ENDREDUCE (273)
+FUNCTION (274) 2
+INTEGER (275) 7
+IS (276) 6
+REDUCE (277)
+RETURNS (278) 2
+REAL (279) 8
+IF (280)
+THEN (281)
+ELSE (282)
+ENDIF (283)
+CASE (284)
+OTHERS (285)
+ARROW (286)
+ENDCASE (287)
+WHEN (288)
+NOT (289)
+
+
+Nonterminals, with rules where they appear
+
+$accept (39)
+    on left: 0
+function (40)
+    on left: 1, on right: 0
+function_header (41)
+    on left: 2 3, on right: 1
+optional_variable (42)
+    on left: 4 5, on right: 1
+variable (43)
+    on left: 6, on right: 4
+type (44)
+    on left: 7 8 9, on right: 2 6
+body (45)
+    on left: 10, on right: 1
+statement_ (46)
+    on left: 11, on right: 6 10
+
+
+State 0
+
+    0 $accept: . function $end
+
+    error     shift, and go to state 1
+    FUNCTION  shift, and go to state 2
+
+    function         go to state 3
+    function_header  go to state 4
+
+
+State 1
+
+    3 function_header: error . ';'
+
+    ';'  shift, and go to state 5
+
+
+State 2
+
+    2 function_header: FUNCTION . IDENTIFIER RETURNS type ';'
+
+    IDENTIFIER  shift, and go to state 6
+
+
+State 3
+
+    0 $accept: function . $end
+
+    $end  shift, and go to state 7
+
+
+State 4
+
+    1 function: function_header . optional_variable body
+
+    IDENTIFIER  shift, and go to state 8
+
+    $default  reduce using rule 5 (optional_variable)
+
+    optional_variable  go to state 9
+    variable           go to state 10
+
+
+State 5
+
+    3 function_header: error ';' .
+
+    $default  reduce using rule 3 (function_header)
+
+
+State 6
+
+    2 function_header: FUNCTION IDENTIFIER . RETURNS type ';'
+
+    RETURNS  shift, and go to state 11
+
+
+State 7
+
+    0 $accept: function $end .
+
+    $default  accept
+
+
+State 8
+
+    6 variable: IDENTIFIER . ':' type IS statement_
+
+    ':'  shift, and go to state 12
+
+
+State 9
+
+    1 function: function_header optional_variable . body
+
+    BEGIN_  shift, and go to state 13
+
+    body  go to state 14
+
+
+State 10
+
+    4 optional_variable: variable .
+
+    $default  reduce using rule 4 (optional_variable)
+
+
+State 11
+
+    2 function_header: FUNCTION IDENTIFIER RETURNS . type ';'
+
+    BOOLEAN  shift, and go to state 15
+    INTEGER  shift, and go to state 16
+    REAL     shift, and go to state 17
+
+    type  go to state 18
+
+
+State 12
+
+    6 variable: IDENTIFIER ':' . type IS statement_
+
+    BOOLEAN  shift, and go to state 15
+    INTEGER  shift, and go to state 16
+    REAL     shift, and go to state 17
+
+    type  go to state 19
+
+
+State 13
+
+   10 body: BEGIN_ . statement_ END ';'
+
+    error  shift, and go to state 20
+
+    statement_  go to state 21
+
+
+State 14
+
+    1 function: function_header optional_variable body .
+
+    $default  reduce using rule 1 (function)
+
+
+State 15
+
+    9 type: BOOLEAN .
+
+    $default  reduce using rule 9 (type)
+
+
+State 16
+
+    7 type: INTEGER .
+
+    $default  reduce using rule 7 (type)
+
+
+State 17
+
+    8 type: REAL .
+
+    $default  reduce using rule 8 (type)
+
+
+State 18
+
+    2 function_header: FUNCTION IDENTIFIER RETURNS type . ';'
+
+    ';'  shift, and go to state 22
+
+
+State 19
+
+    6 variable: IDENTIFIER ':' type . IS statement_
+
+    IS  shift, and go to state 23
+
+
+State 20
+
+   11 statement_: error . ';'
+
+    ';'  shift, and go to state 24
+
+
+State 21
+
+   10 body: BEGIN_ statement_ . END ';'
+
+    END  shift, and go to state 25
+
+
+State 22
+
+    2 function_header: FUNCTION IDENTIFIER RETURNS type ';' .
+
+    $default  reduce using rule 2 (function_header)
+
+
+State 23
+
+    6 variable: IDENTIFIER ':' type IS . statement_
+
+    error  shift, and go to state 20
+
+    statement_  go to state 26
+
+
+State 24
+
+   11 statement_: error ';' .
+
+    $default  reduce using rule 11 (statement_)
+
+
+State 25
+
+   10 body: BEGIN_ statement_ END . ';'
+
+    ';'  shift, and go to state 27
+
+
+State 26
+
+    6 variable: IDENTIFIER ':' type IS statement_ .
+
+    $default  reduce using rule 6 (variable)
+
+
+State 27
+
+   10 body: BEGIN_ statement_ END ';' .
+
+    $default  reduce using rule 10 (body)
