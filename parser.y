@@ -80,13 +80,13 @@ body:
 
 statement_:
   statement ';' |
-  error ';' {$$ = MISMATCH};
+  error ';' {$$ = MISMATCH;};
 
 statement:
 	expression ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' {$$ = $3} |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' {$$=$3} |
-  error ';' ;
+  IF expression THEN statement ELSE statement ENDIF ';' {$$ = checkIfThen($3, $5);} |
+  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' {$$=$2;}
+   ;
 
 cases:
   | cases case ;
@@ -94,47 +94,48 @@ cases:
 case:
   WHEN INT_LITERAL ARROW statement ;
 
-primary:
-  '(' expression ')' |
-  INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
-  IDENTIFIER ;
+
 
 expression:
-  expression OROP term1 |
+  expression OROP term1 {$$ = checkLogical($1, $3);} |
   term1
   ;
 
 term1:
-  term1 ANDOP term2 |
+  term1 ANDOP term2 {$$ = checkLogical($1,$3);} |
   term1
   ;
 
 term2:
-  term2 RELOP term3 |
+  term2 RELOP term3 {$$ = checkRelational($1,$3);} |
   term3
   ;
 
 term3:
-  term3 ADDOP term4 |
+  term3 ADDOP term4 {$$ = checkArithmetic($1,$3);} |
   term4
   ;
 
 term4:
-  term4 MULOP term5 |
-  term4 REMOP term5 |
+  term4 MULOP term5 {$$ = checkArithmetic($1, $3);} |
+  term4 REMOP term5 {$$ = checkArithmetic($1, $3);} |
   term5
   ;
 
 term5:
-  term5 EXPOP term6 |
+  term5 EXPOP term6 {$$ = checkArithmetic($1,$3);} |
   term6
   ;
 
 term6:
-  NOTOP primary |
+  NOTOP primary {$$ = $2;} |
   primary
   ;
 
+primary:
+  '(' expression ')' {$$ = $2;} |
+  INT_LITERAL | REAL_LITERAL | BOOLEAN_LITERAL |
+  IDENTIFIER {if (!symbols.find($1, $$)) appendError(UNDECLARED, $1);};
 
 %%
 

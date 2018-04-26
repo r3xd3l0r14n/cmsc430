@@ -49,7 +49,8 @@ Types checkRelational(Types left, Types right)
 		return MISMATCH;
 	return BOOL_TYPE;
 }
-Types checkIfThen(Types left, Types right)
+Types checkIfThen(Types s1, Types s2)
 {
-	return BOOL_TYPE
+	if
+	return BOOL_TYPE;
 }

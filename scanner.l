@@ -10,6 +10,7 @@
 
 using namespace std;
 
+#include "types.h"
 #include "listing.h"
 #include "tokens.h"
 
@@ -68,8 +69,8 @@ others    { ECHO; return(OTHERS); }
 real      { ECHO; return(REAL); }
 then      { ECHO; return(THEN); }
 when      { ECHO; return(WHEN); }
-{id}		{ ECHO; return(IDENTIFIER);}
-{int}		{ ECHO; return(INT_LITERAL); }
+{id}		{ ECHO; yylval.iden = (CharPtr)malloc(yyleng + 1); strcpy(yylval.iden, yytext); return(IDENTIFIER);}
+{int}		{ ECHO; yylval.type = INT_TYPE; return(INT_LITERAL); }
 {punc}		{ ECHO; return(yytext[0]); }
 {realLit} { ECHO; return(REAL_LITERAL); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
