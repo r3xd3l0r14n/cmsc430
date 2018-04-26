@@ -72,6 +72,6 @@ when      { ECHO; return(WHEN); }
 {id}		{ ECHO; yylval.iden = (CharPtr)malloc(yyleng + 1); strcpy(yylval.iden, yytext); return(IDENTIFIER);}
 {int}		{ ECHO; yylval.type = INT_TYPE; return(INT_LITERAL); }
 {punc}		{ ECHO; return(yytext[0]); }
-{realLit} { ECHO; return(REAL_LITERAL); }
+{realLit} { ECHO; yylval.type = REAL_TYPE; return(REAL_LITERAL); }
 .		{ ECHO; appendError(LEXICAL, yytext); }
 %%

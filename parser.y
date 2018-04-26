@@ -9,8 +9,8 @@
 
 using namespace std;
 
-#include "listing.h"
 #include "types.h"
+#include "listing.h"
 #include "symbols.h"
 
 int yylex();
@@ -39,39 +39,35 @@ Symbols<Types> symbols;
 
 %type <type> type statement statement_ expression primary term1 term2 term3 term4 term5 term6
 
-
 %%
 
 function:
-	function_header variables body ;
+	function_header optional_variable body ;
 
 function_header:
-	FUNCTION IDENTIFIER parameters RETURNS type ';' |
+	FUNCTION IDENTIFIER RETURNS type ';' |
   error ';'
   ;
 
-variables:
-  variable_ variables |
-  ;
-variable_:
+optional_variable:
   variable |
-  error ';';
+  ;
 
 variable:
 	IDENTIFIER ':' type IS statement_
   {checkAssignment($3, $5, "Variable Initialization");
   symbols.insert($1,$3);} ;
 
-parameters:
+/*parameters:
   |
   parameter |
   parameters parameter ;
 
 parameter:
-  IDENTIFIER ':' type;
+  IDENTIFIER ':' type;*/
 
 type:
-	INTEGER {$$= INT_TYPE;} |
+	INTEGER {$$ = INT_TYPE;} |
   REAL {$$ = REAL_TYPE;} |
 	BOOLEAN {$$ = BOOL_TYPE;} ;
 
@@ -80,21 +76,19 @@ body:
 
 statement_:
   statement ';' |
-  error ';' {$$ = MISMATCH;};
+  error ';' {$$ = MISMATCH;} ;
 
 statement:
-	expression ';' |
-  IF expression THEN statement ELSE statement ENDIF ';' {$$ = checkIfThen($3, $5);} |
-  CASE expression IS cases OTHERS ARROW statement ';' ENDCASE ';' {$$=$2;}
-   ;
+	expression |
+  IF expression THEN statement ELSE statement ENDIF {$$ = checkIfThen($4, $6);} |
+  CASE expression IS cases OTHERS ARROW statement ENDCASE ';' {$$=$2;}
+  ;
 
 cases:
   | cases case ;
 
 case:
   WHEN INT_LITERAL ARROW statement ;
-
-
 
 expression:
   expression OROP term1 {$$ = checkLogical($1, $3);} |

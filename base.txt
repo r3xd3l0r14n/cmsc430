@@ -1,6 +1,10 @@
 // professors base case for arithmetic
 
 function main returns integer;
+a: integer is 9.8+2;
 begin
-  9 + 2 - (5 - 1) / 2 rem 3 * 3 ** 1 ** 2;
+  if a > 3 then
+    5.4;
+  else
+    4;
 end;
